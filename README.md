@@ -85,7 +85,10 @@ Game ────────── Combat + Inventory
 The magic system is implemented via virtual methods (computeDamage(), applyResistance()), eliminating all type-based conditionals — fully polymorphic by design.
 
 👥 Team
-MemberRoleScope[Your Name]Team LeaderGame loop, architecture, Game.cpp, main.cpp[Member 2]Character SystemCharacter, Hero, Warrior, Mage, Archer[Member 3]Combat EngineEnemy, Combat — turn logic, damage, AI[Member 4]Items & ProgressionItem, Inventory, Skill, XP system
+MemberRoleScope Soufiane Team LeaderGame loop, architecture, Game.cpp, main.cpp
+Anas Character SystemCharacter, Hero, Warrior, Mage, Archer
+Hamide Combat EngineEnemy, Combat — turn logic, damage, AI
+Oussama Items & ProgressionItem, Inventory, Skill, XP system
 
 🌿 Branch Strategy
 BranchPurposemasterStable, reviewed code onlydevIntegration — all features merge here firstfeature/heroMember 2's working branchfeature/combatMember 3's working branchfeature/inventoryMember 4's working branch
@@ -97,7 +100,7 @@ Rule: No direct pushes to master. All changes go through dev via Pull Request.
 
 Course: Programmation Orientée Objet — C++
 Level: Licence Génie Informatique (MIP) — Semestre 4
-Institution: [Your University Name]
+Institution: FPT
 Academic Year: 2025–2026
 
 
