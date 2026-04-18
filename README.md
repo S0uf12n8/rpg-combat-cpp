@@ -79,7 +79,8 @@ Character  (abstract base)
 
 Inventory  ───  Item
 Combat     ───  Hero + Enemy
-Game       ───  Combat + Inventory```
+Game       ───  Combat + Inventory
+```
 The magic system is implemented via virtual methods (computeDamage(), applyResistance()), eliminating all type-based conditionals — fully polymorphic by design.
 
 👥 Team
