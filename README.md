@@ -69,16 +69,17 @@ Clean build
 bashmake clean
 
 🧱 Class Architecture
+```text
 Character  (abstract base)
 ├── Hero
 │   ├── Warrior
 │   ├── Mage
 │   └── Archer
 └── Enemy
-         
-Inventory ──── Item
-Combat ──────── Hero + Enemy
-Game ────────── Combat + Inventory
+
+Inventory  ───  Item
+Combat     ───  Hero + Enemy
+Game       ───  Combat + Inventory```
 The magic system is implemented via virtual methods (computeDamage(), applyResistance()), eliminating all type-based conditionals — fully polymorphic by design.
 
 👥 Team
