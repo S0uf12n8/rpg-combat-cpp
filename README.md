@@ -13,9 +13,9 @@ RPG Combat Console is a semester project developed as part of the C++ Object-Ori
 
 
 🏗️ Project Structure
+```text
 rpg-combat-cpp/
-│
-├── include/              # Header files (.h) — class declarations
+├── include/
 │   ├── Character.h
 │   ├── Hero.h
 │   ├── Enemy.h
@@ -27,8 +27,7 @@ rpg-combat-cpp/
 │   ├── Inventory.h
 │   ├── Combat.h
 │   └── Game.h
-│
-├── src/                  # Source files (.cpp) — implementations
+├── src/
 │   ├── Character.cpp
 │   ├── Hero.cpp
 │   ├── Enemy.cpp
@@ -41,15 +40,13 @@ rpg-combat-cpp/
 │   ├── Combat.cpp
 │   ├── Game.cpp
 │   └── main.cpp
-│
-├── docs/                 # UML diagrams and project report
+├── docs/
 │   ├── class_diagram.png
 │   └── rapport.pdf
-│
 ├── Makefile
 ├── .gitignore
 └── README.md
-
+```
 🚀 Getting Started
 Prerequisites
 
