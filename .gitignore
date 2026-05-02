@@ -1,0 +1,11 @@
+build/
+*.exe
+*.o
+*.obj
+.vscode/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+saves/*.json
