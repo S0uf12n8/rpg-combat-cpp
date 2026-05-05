@@ -309,7 +309,7 @@ protected:
     void use(Entity& caster, Entity& target)override{
         cout<<" Multi Arrow Attack "<<caster.name<<"Multi Launches"<<ARROWS<<"Arrow\n";
         int total =0;
-        for(int i; i < ARROWS; i++){
+        for(int i=0; i < ARROWS; i++){
             if (rollHit()){
                 cout<<" Arrow "<<i<<": ";
                 target.takeDamage(ARROW_DMG);
@@ -319,5 +319,112 @@ protected:
             }
         }
         cout<<"total damage: "<<total<<"\n";
+    }
+};
+
+//-----------------------
+// CHARACTER SUBCLASSES
+//-----------------------
+
+class Fighter : public Entity{
+public:
+    Fighter(const string& n): Entity(n, 130){
+        addAbility(new HeavySlash());
+        addAbility(new VerticalCut());
+        addAbility(new TripleStrike());
+    }
+};
+
+class Mage : public Entity{
+public:
+    Mage(const string& n): Entity(n, 80){
+        addAbility(new Fireball());
+        addAbility(new FreezeSpell());
+        addAbility(new Flash());
+    }
+};
+
+class Archer : public Entity{
+public:
+    Archer(const string& n): Entity(n, 100){
+        addAbility(new PowerArrow());
+        addAbility(new MultiArrow());
+    }
+};
+
+//-----------------------
+// COMBAT
+//-----------------------
+
+class Combat{
+    vector<Entity*> participants;
+    int round = 1;
+public:
+    void addParticipant(Entity* e){
+        participants.push_back(e);
+    }
+    void runUnitilOver(int maxRounds = 20){
+        while (maxRounds-- >0 && !isOver())
+        {
+            runRound();
+        }
+        announceResult();
+    }
+private:
+    void runRound(){
+        cout<<"\n**************************\n";
+        cout<<"     ROUND<<"<<round++<<"   \n";
+        cout<<"\n**************************\n";
+    
+        for(auto* actor : participants){
+            if (!actor-> isAlive()) continue;
+
+            //status effects
+            actor->applyEffects();
+
+            if(actor->frozenThisTurn){
+                cout<<"  "<<actor->name <<"frozen this Turn\n";
+            }
+
+            //cooldowns
+            actor->tickAllColldowns();
+
+            //choose a target and attack it
+            Entity* target = findOpponnet(actor);
+            if (!target) continue;
+            cout<<"\n -> Turn"<<actor->name<<"(Attack"<<target-> name<<")\n";
+            for (int i = 0; i < (int)actor ->abilities.size(); i++){
+                if (actor-> useAbility(i, *target)) break;
+            }
+        }    
+        // show status
+        cout<<"\n********* status *********\n";
+        for(auto* e : participants) e->printStatus();
+    }
+
+    Entity* findOpponnet(Entity* actor){
+        for(auto*e : participants)
+            if(e != actor && e-> isAlive()) return e;
+        return nullptr;
+    }
+
+    bool isOver()const{
+        int alive=0;
+        for(auto* e : participants)
+            if (e->isAlive()) alive++;
+        return alive <= 1;
+    }
+
+    void announceResult()const{
+        cout<<"\n**************************\n";
+        for(auto* e: participants){
+            if(e->isAlive()){
+                cout<<"     the winner: <<"<<e->name<<"\n";
+                cout<<"\n**************************\n";
+                return;
+            }
+        }
+        cout<<"      it's Draw     "<<"\n";  
+        cout<<"\n**************************\n";
     }
 };
