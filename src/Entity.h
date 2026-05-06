@@ -90,7 +90,6 @@ protected:
 class Entity{
 
     public:
-    bool isPlayer = false;
     string name;
     int hp;
     int maxHp;
