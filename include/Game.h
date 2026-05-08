@@ -22,7 +22,9 @@ class Game {
         void selectHeroClass();
         void gameLoop();
         int getUserChoice(int min, int max);
-    public:
+    
+    
+        public:
         Game();           
         void run();       
 
