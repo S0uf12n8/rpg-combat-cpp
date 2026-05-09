@@ -28,37 +28,92 @@ The game features a player-controlled hero fighting randomly generated enemies i
 
 ```bash
 rpg-combat-cpp/
-├── include/
-│   ├── Character.h
-│   ├── Hero.h
-│   ├── Enemy.h
-│   ├── Warrior.h
-│   ├── Mage.h
-│   ├── Archer.h
-│   ├── Skill.h
-│   ├── Item.h
-│   ├── Inventory.h
-│   ├── Combat.h
-│   └── Game.h
-├── src/
-│   ├── Character.cpp
-│   ├── Hero.cpp
-│   ├── Enemy.cpp
-│   ├── Warrior.cpp
-│   ├── Mage.cpp
-│   ├── Archer.cpp
-│   ├── Skill.cpp
-│   ├── Item.cpp
-│   ├── Inventory.cpp
-│   ├── Combat.cpp
-│   ├── Game.cpp
-│   └── main.cpp
-├── docs/
-│   ├── class_diagram.png
-│   └── rapport.pdf
-├── Makefile
-├── .gitignore
-└── README.md
+D:.
+│   .gitignore
+│   claud.md
+│   CMakeLists.txt
+│   README.md
+│
+├───.vscode
+│       c_cpp_properties.json
+│       launch.json
+│       settings.json
+│
+├───assets
+│   └───ascii_art
+├───build
+├───docs
+├───external
+├───include
+│   │   Archer.h
+│   │   Armor.h
+│   │   Burn.h
+│   │   Colors.h
+│   │   Combat.h
+│   │   ConsoleUI.h
+│   │   Consumable.h
+│   │   Crafting.h
+│   │   DataLoader.h
+│   │   Dungeon.h
+│   │   Enemy.h
+│   │   EnemyFactory.h
+│   │   Entity.h
+│   │   Game.h
+│   │   Hero.h
+│   │   Inventory.h
+│   │   Item.h
+│   │   Mage.h
+│   │   Material.h
+│   │   Poison.h
+│   │   SaveManager.h
+│   │   Skill.h
+│   │   Stats.h
+│   │   StatusEffect.h
+│   │   Stun.h
+│   │   Warrior.h
+│   │   Weapon.h
+│   │
+│   └───combat
+│           Combat.h
+│
+├───saves
+│       .gitkeep
+│
+└───src
+        Archer.cpp
+        Archer.h
+        Armor.cpp
+        Burn.cpp
+        Combat.cpp
+        Combat.h
+        ConsoleUI.cpp
+        Consumable.cpp
+        Crafting.cpp
+        DataLoader.cpp
+        Dungeon.cpp
+        Enemy.cpp
+        EnemyFactory.cpp
+        Entity.cpp
+        Entity.h
+        Game.cpp
+        Hero.cpp
+        Inventory.cpp
+        Item.cpp
+        Mage.cpp
+        Mage.h
+        main.cpp
+        Material.cpp
+        Poison.cpp
+        SaveManager.cpp
+        Skill.cpp
+        Stats.cpp
+        StatusEffect.cpp
+        Stun.cpp
+        Warrior.cpp
+        Warrior.h
+        Weapon.cpp
+
+
 ```
 
 ---
