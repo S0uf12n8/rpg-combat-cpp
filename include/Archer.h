@@ -1,51 +1,40 @@
-#pragma once
-#include "Entity.h"
+#ifndef ARCHER_H
+#define ARCHER_H
 
-// Power Arrow
-class PowerArrow : public Ability{
+// ============================================================
+//  Archer.h
+//  Concrete playable class: fast ranged attacker.
+//
+//  Stats profile:
+//    - Medium HP, medium defense
+//    - High speed (attacks first in combat ordering)
+//    - Balanced attack + critical-hit style gameplay
+//
+//  Signature skill: Piercing Arrow — 30% critical hit chance.
+// ============================================================
+
+#include "Hero.h"
+#include <cstdlib> // rand()
+
+// ---- Archer class ----
+class Archer : public Hero {
 public:
-    PowerArrow() : Ability("Power Arrow",48,0.75f,3){}
-protected:
-    void use(Entity& caster, Entity& target){
-        cout<<" Power Arrow Attack "<<caster.name<<"Power Arrow Launches\n";
-        if(rollHit())
-            target.takeDamage(damage);
-        else
-            cout<< "Arrow Attack Missed\n";
-    }
+    explicit Archer(const string& name);
+
+    void attack(Entity& target);
+    void useSkill(Entity& target);
+
+    // Archer-specific level-up: boosts speed and attack more than base.
+    void levelUp();
 };
 
-// Multi Arrow
-class MultiArrow : public Ability{
-    static constexpr int ARROW_DMG = 18;
-    static constexpr int ARROWS = 3;
+// ---- Archer's signature skill ----
+// Declared after Archer so the class comes first, as per convention.
+class PiercingArrow : public Skill {
 public:
-    MultiArrow() : Ability("Multi Arrow",ARROW_DMG,0.80f,2){}
-protected:
-    void use(Entity& caster, Entity& target)override{
-        cout<<" Multi Arrow Attack "<<caster.name<<"Multi Launches"<<ARROWS<<"Arrow\n";
-        int total =0;
-        for(int i=0; i < ARROWS; i++){
-            if (rollHit()){
-                cout<<" Arrow "<<i<<": ";
-                target.takeDamage(ARROW_DMG);
-                total+= ARROW_DMG;
-            }else{
-                cout<<"Arrow Attack Missed\n";
-            }
-        }
-        cout<<"total damage: "<<total<<"\n";
-    }
+    PiercingArrow();
+    // 30% chance to deal double damage (critical hit).
+    void use(Entity& caster, Entity& target) const;
 };
 
-//-----------------------
-// CHARACTER SUBCLASSES
-//-----------------------
-
-class Archer : public Entity{
-public:
-    Archer(const string& n): Entity(n, 100){
-        addAbility(new PowerArrow());
-        addAbility(new MultiArrow());
-    }
-};
+#endif // ARCHER_H
