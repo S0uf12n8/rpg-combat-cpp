@@ -1,64 +1,39 @@
-#pragma once
-#include "Entity.h"
+#ifndef WARRIOR_H
+#define WARRIOR_H
 
-//-----------------------
-// fighter abilities
-//-----------------------
+// ============================================================
+//  Warrior.h
+//  Concrete playable class: melee fighter.
+//
+//  Stats profile:
+//    - High HP, high defense
+//    - Medium attack
+//    - Low speed, no mana
+//
+//  Signature skill: Power Slash — a heavy, armor-ignoring blow.
+// ============================================================
 
-//strong attack
-class HeavySlash : public Ability{
+#include "Hero.h"
+
+// ---- Warrior class ----
+class Warrior : public Hero {
 public:
-    HeavySlash() : Ability("Heavy Slash",45,0.60f,3){}
-protected:
-    void use(Entity& caster, Entity& target)override {
-        cout<<" sword attack "<<caster.name<<"Heavy Stroke\n";
-        if(rollHit())
-            target.takeDamage(damage);
-        else
-            cout<< " Missed Heavy Cut ";
-    }
+    explicit Warrior(const string& name);
+
+    void attack(Entity& target);
+    void useSkill(Entity& target);
+
+    // Warrior-specific level-up: boosts HP and defense more than base.
+    void levelUp();
 };
 
-//moderate attack
-class VerticalCut:public Ability{
+// ---- Warrior's signature skill ----
+// Declared after Warrior so the class comes first, as per convention.
+class PowerSlash : public Skill {
 public:
-    VerticalCut():Ability("Vertical Cut",35,0.80f,2){}
-protected:
-    void use(Entity& caster, Entity& target){
-        cout<<" sword attack "<<caster.name<<"Medium Stroke\n";
-        if(rollHit())
-            target.takeDamage(damage);
-        else
-            cout<< " Missed Vertical Cut ";
-    }
+    PowerSlash();
+    // Ignores a portion of the target's defense (armor-piercing).
+    void use(Entity& caster, Entity& target) const;
 };
 
-//Light Stroke
-class TripleStrike : public Ability{
-public:
-    TripleStrike() : Ability("Triple Strike",12,0.85f,3){}
-protected:
-    void use(Entity& caster, Entity& target){
-        for (int i = 0; i < 3; i++){
-            if (rollHit()){
-                cout <<" attack "<<i<<": ";
-                target.takeDamage(damage);}
-            else{
-                cout<<" attack "<<i<<"Missed attack\n";
-            }
-        }
-    }
-};
-
-//-----------------------
-// CHARACTER SUBCLASSES
-//-----------------------
-
-class Warrior : public Entity{
-public:
-    Warrior(const string& n): Entity(n, 130){
-        addAbility(new HeavySlash());
-        addAbility(new VerticalCut());
-        addAbility(new TripleStrike());
-    }
-};
+#endif // WARRIOR_H
