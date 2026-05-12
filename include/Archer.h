@@ -1,6 +1,5 @@
 #ifndef ARCHER_H
 #define ARCHER_H
-
 #include "Hero.h"
 #include <cstdlib> 
 
@@ -12,7 +11,8 @@ public:
     void useSkill(Entity& target);
 
     void levelUp();
-};
+}; 
+
 
 class PiercingArrow : public Skill {
 public:

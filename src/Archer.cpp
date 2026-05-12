@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 
+
 PiercingArrow::PiercingArrow()
     : Skill("Piercing Arrow", /*manaCost=*/20, /*power=*/40, "A swift arrow with a 30% critical hit chance for double damage.")
 {}
