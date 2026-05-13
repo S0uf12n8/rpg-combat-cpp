@@ -2,31 +2,33 @@
 #include <string>
 #include <vector>
 #include <memory>
-
-class StatusEffect; 
+#include "Stats.h"
+#include "Skill.h"
 
 class Entity {
+protected:
+    std::string name_;
+    Stats       stats_;
+    std::vector<std::unique_ptr<Skill>> skills_;
+
+    void tryUseSkill(int index, Entity& target);
+
 public:
+    Entity(const std::string& name, const Stats& stats);
     virtual ~Entity() = default;
 
-    virtual void attack(Entity& target) = 0;
-    virtual void takeDamage(int amount) = 0;
-    virtual void heal(int amount) = 0;
-    virtual bool isAlive() const = 0;
+    Entity(const Entity&)            = delete;
+    Entity& operator=(const Entity&) = delete;
 
-    virtual std::string getName() const = 0;
-    virtual int getHP() const = 0;
-    virtual int getMaxHP() const = 0;
-    virtual int getAttack() const = 0;
-    virtual int getDefense() const = 0;
+    virtual void attack(Entity& target)   = 0;
+    virtual void useSkill(Entity& target) = 0;
 
-    // Status effects — Oussama uses these
-    void addEffect(std::shared_ptr<StatusEffect> effect);
-    void processEffects();
-    void clearEffects();
+    void takeDamage(int rawDamage);
+    bool isAlive() const;
 
-protected:
-    std::string name;
-    int hp, maxHp, attackPower, defense;
-    std::vector<std::shared_ptr<StatusEffect>> activeEffects;
+    virtual void displayStats() const;
+
+    const std::string& getName()  const;
+    const Stats&       getStats() const;
+    Stats&             getStats();
 };
