@@ -1,19 +1,15 @@
 #include "Poison.h"
 #include "Entity.h"
-Poison::Poison(const std::string& name, int duration)
-:StatusEffect(name,duration),poisoning(5){}
+#include <iostream>
+Poison::Poison():StatusEffect(3){}
 
-void Poison::onTurnStart(Entity& target){
-    target.takeDamage(target.getHp()*0.05);
-    duration--;
+void Poison::applyEffect(Entity& target){
+    target.takeDamage(5);
+    
+    std::cout<<target.getName()<<" is poisoned and takes 5 damage!";
 }
 
-void Poison::onTurnEnd(Entity& target){}
-
-bool Poison::isExpired()const{
-    return duration<=0;
-}
 
 std::string Poison::getName() const{
-    return name;
+    return "Poison";
 }

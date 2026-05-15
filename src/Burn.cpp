@@ -1,20 +1,16 @@
 #include "Burn.h"
 #include "Entity.h"
+#include <iostream>
 
-Burn::Burn(const std::string& name, int duration):
-StatusEffect(name,duration), buring(2){}
+Burn::Burn():StatusEffect(3){}
 
-void Burn::onTurnStart(Entity& target){
-    target.takeDamage(target.getHp()*0.02);
-    duration--;
+void Burn::applyEffect(Entity& target){
+    target.takeDamage(8);
+    
+    std::cout<<target.getName()<<" is burning and takes 8 damage!";
 }
 
-void Burn::onTurnEnd(Entity& target){}
-
-bool Burn::isExpired()const{
-    return duration<=0;
-}
 
 std::string Burn::getName() const{
-    return name;
+    return "Burn";
 }

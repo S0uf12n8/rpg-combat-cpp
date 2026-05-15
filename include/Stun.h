@@ -3,12 +3,8 @@
 
 class Stun:public StatusEffect{
 public:
-    Stun(const std::string& name,int duration);
+    Stun();
 
-    void onTurnStart(Entity& target) override;
-    void onTurnEnd(Entity& target) override;
-    bool isExpired()const override;
+    void applyEffect(Entity& target) override;
     std::string getName() const override;
-private:
-    bool freezeturn;
 };

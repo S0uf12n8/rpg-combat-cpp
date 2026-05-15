@@ -1,9 +1,13 @@
 #include "StatusEffect.h"
 
-StatusEffect::StatusEffect(const std::string& name, int duration){
-    this->name=name;
+StatusEffect::StatusEffect(int duration){
+    
     this->duration=duration;
 }
-std::string StatusEffect::getName()const{
-    return name;
+bool StatusEffect::isExpired()const{
+    return duration<=0;
 }
+void StatusEffect::tick(){
+    duration--;
+}
+
