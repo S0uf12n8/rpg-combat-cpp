@@ -4,16 +4,17 @@
 class Entity; 
 
 class StatusEffect {
+protected:   
+    int duration;
+
 public:
+    
+    StatusEffect(int duration);
+    
     virtual ~StatusEffect() = default;
 
-    virtual void onTurnStart(Entity& target) = 0;
-    virtual void onTurnEnd(Entity& target) = 0;
-    virtual bool isExpired() const = 0;
-    virtual std::string getName() const = 0;
-    virtual std::string getDescription() const = 0;
-
-protected:
-    int duration;
-    int turnsRemaining;
+    virtual void applyEffect(Entity& target) = 0; 
+    virtual std::string getName() const = 0;  
+    bool isExpired() const;
+    void tick();         
 };
