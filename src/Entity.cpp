@@ -1,13 +1,16 @@
 #include "Entity.h"
 #include <iostream>
+using namespace std;
 
-Entity::Entity(const std::string& name, const Stats& stats)
-    : name_(name), stats_(stats)
-{}
+Entity::Entity(const string& name, const Stats& stats)
+    : name_(name), stats_(stats) {}
 
+Entity::~Entity() {
+    for (Skill* s : skills_) delete s;
+}
 
-void Entity::takeDamage(int rawDamage) {
-    stats_.takeDamage(rawDamage);
+void Entity::takeDamage(int raw) {
+    stats_.takeDamage(raw);
 }
 
 bool Entity::isAlive() const {
@@ -15,27 +18,24 @@ bool Entity::isAlive() const {
 }
 
 void Entity::displayStats() const {
-    std::cout << "  [" << name_ << "]"
-              << "  HP: "  << stats_.getCurrentHP() << "/" << stats_.getMaxHP()
-              << "  MP: "  << stats_.getMana()       << "/" << stats_.getMaxMana()
-              << "  ATK: " << stats_.getAttack()
-              << "  DEF: " << stats_.getDefense()
-              << "  SPD: " << stats_.getSpeed()
-              << "\n";
+    cout << "  [" << name_ << "]"
+         << "  hp: " << stats_.getCurrentHP() << "/" << stats_.getMaxHP()
+         << "  mp: " << stats_.getMana()      << "/" << stats_.getMaxMana()
+         << "  atk: " << stats_.getAttack()
+         << "  def: " << stats_.getDefense()
+         << "  spd: " << stats_.getSpeed() << "\n";
 }
 
-const std::string& Entity::getName()  const { return name_; }
-const Stats&       Entity::getStats() const { return stats_; }
-Stats&             Entity::getStats()       { return stats_; }
+const string& Entity::getName()  const { return name_; }
+const Stats&  Entity::getStats() const { return stats_; }
+Stats&        Entity::getStats()       { return stats_; }
 
 void Entity::tryUseSkill(int index, Entity& target) {
-    if (index < 0 || index >= static_cast<int>(skills_.size())) return;
+    if (index < 0 || index >= (int)skills_.size()) return;
 
-    Skill* skill = skills_[index].get(); // .get() to borrow raw pointer without releasing ownership
-
+    Skill* skill = skills_[index];
     if (stats_.getMana() < skill->getManaCost()) {
-        std::cout << name_ << " doesn't have enough mana for "
-                  << skill->getName() << "!\n";
+        cout << name_ << " not enough mana for " << skill->getName() << "!\n";
         return;
     }
 
