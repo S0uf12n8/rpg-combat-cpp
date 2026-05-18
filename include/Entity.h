@@ -3,15 +3,11 @@
 #include <vector>
 #include <memory>
 #include "Stats.h"
-#include "Skill.h"
 
 class Entity {
 protected:
     std::string name_;
     Stats       stats_;
-    std::vector<std::unique_ptr<Skill>> skills_;
-
-    void tryUseSkill(int index, Entity& target);
 
 public:
     Entity(const std::string& name, const Stats& stats);
