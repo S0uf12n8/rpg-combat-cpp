@@ -31,7 +31,7 @@ Stats&             Entity::getStats()       { return stats_; }
 void Entity::tryUseSkill(int index, Entity& target) {
     if (index < 0 || index >= static_cast<int>(skills_.size())) return;
 
-    Skill* skill = skills_[index].get(); // .get() to borrow raw pointer without releasing ownership
+    Skill* skill = skills_[index].get();
 
     if (stats_.getMana() < skill->getManaCost()) {
         std::cout << name_ << " doesn't have enough mana for "
