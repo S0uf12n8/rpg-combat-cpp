@@ -100,6 +100,9 @@ void Game::gameLoop() {
 
         if (!currentHero->isAlive()) {
             ui.showDeathScreen();
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
             return;
         }
 
@@ -111,7 +114,12 @@ void Game::gameLoop() {
         }
     }
 
-    ui.showVictory();
+    if (currentHero->isAlive()) {
+        ui.showVictory();
+        cout << "\nPress Enter to continue...";
+        cin.ignore();
+        cin.get();
+    }
 }
 
 int Game::getUserChoice(int min, int max) {

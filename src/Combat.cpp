@@ -98,7 +98,8 @@ void Combat::startCombat() {
 
         if (hero.getStats().getSpeed() >= enemy.getStats().getSpeed()) {
             heroTurn();
-            if (!isCombatOver()) enemyTurn();
+            if (isCombatOver() || maxRounds == 0) break;
+            enemyTurn();
         } else {
             enemyTurn();
             if (!isCombatOver()) heroTurn();
