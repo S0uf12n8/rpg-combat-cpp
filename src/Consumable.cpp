@@ -1,7 +1,6 @@
 #include "Consumable.h"
 #include <iostream>
 
-// We use Item(...) to call the parent constructor first
 Consumable::Consumable(const std::string& name,
                        const std::string& description,
                        int value,

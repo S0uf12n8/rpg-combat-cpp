@@ -47,11 +47,10 @@ Item* Inventory::getItem(int index) const {
 
 void Inventory::display() const {
     if (items.empty()) {
-        std::cout << "Inventory is empty\n";
+        std::cout << "Inventory is empty.\n";
         return;
     }
-    for (int i = 0; i < (int)items.size(); i++) {
-        std::cout << "[" << i + 1 << "] "
-                  << items[i]->getDescription() << "\n";
-    }
+    for (int i = 0; i < (int)items.size(); i++)
+        std::cout << "[" << i << "] "
+                  << items[i]->getName() << "\n";
 }
