@@ -1,20 +1,13 @@
-#pragma once
+#include "Combat.h"
+#include "Hero.h"
+#include "Enemy.h"
+#include "Entity.h"
+#include <iostream>
 
-class Hero;
-class Entity;
+Combat::Combat(Hero& hero, Enemy& enemy)
+    : hero(hero), enemy(enemy), heroStunned(false), enemyStunned(false) {}
 
-class Combat{
-public:
-    Combat(Hero& hero,Entity& enemy);
-
-    void startCombat();
-    void heroTurn();
-    void enemyTurn();
-    void applyEffects();
-    bool isCombatOver();
-
-private:
-    Hero& hero;
-    Entity& enemy;
-    int maxRounds;
-};
+Combat::~Combat() {
+    cleanupEffects(heroEffects);
+    cleanupEffects(enemyEffects);
+}
