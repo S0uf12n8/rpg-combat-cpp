@@ -1,21 +1,13 @@
-#ifndef ARCHER_H
-#define ARCHER_H
-
+#pragma once
 #include "Hero.h"
-
-class PiercingArrow : public Skill {
-public:
-    PiercingArrow();
-    void use(Entity& caster, Entity& target) const override;
-};
+#include <string>
 
 class Archer : public Hero {
 public:
-    explicit Archer(const string& name);
+    explicit Archer(const std::string& name);
+    virtual ~Archer() = default;
 
-    void attack(Entity& target) override;
     void useSkill(Entity& target) override;
+    std::string getType() const override;
     void levelUp() override;
 };
-
-#endif
