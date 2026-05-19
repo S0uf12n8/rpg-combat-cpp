@@ -11,9 +11,9 @@ Hero::Hero(const string& name, const Stats& stats)
 
 int Hero::attack(Entity& target) {
     int rawDamage = stats_.getAttack() + (equippedWeapon ? equippedWeapon->getAttackBonus() : 0);
-    int reducedDamage = target.getStats().calculateReducedDamage(rawDamage);
-    target.takeDamage(reducedDamage);
-    return reducedDamage;
+    int hpBefore = target.getStats().getCurrentHP();
+    target.takeDamage(rawDamage);
+    return hpBefore - target.getStats().getCurrentHP();
 }
 
 void Hero::gainXP(int amount) {
