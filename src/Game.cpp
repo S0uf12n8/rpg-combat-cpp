@@ -1,9 +1,19 @@
 #include "Game.h"
 #include "Hero.h"
 #include "Colors.h"
+#include "ConsoleUI.h"
+#include "Warrior.h"
+#include "Mage.h"
+#include "Archer.h"
+#include "Enemy.h"
+#include "EnemyFactory.h"
+#include "Combat.h"
 #include <iostream>
 #include <limits>
 #include <cstdlib>
+#include <memory>
+#include <string>
+#include <vector>
 using namespace std;
 
 Game::Game() : running(true) {}
@@ -50,11 +60,58 @@ void Game::run() {
 }
 
 void Game::selectHeroClass() {
-    cout << CYAN << "\n  [Hero selection coming soon]\n" << RESET;
+    ConsoleUI ui;
+    ui.showHeroSelection();
+
+    cout << "Choose your hero (1-3): ";
+    int choice = getUserChoice(1, 3);
+
+    cout << "Enter your hero's name: ";
+    string name;
+    getline(cin, name);
+
+    if (choice == 1) {
+        currentHero = make_unique<Warrior>(name);
+    } else if (choice == 2) {
+        currentHero = make_unique<Mage>(name);
+    } else {
+        currentHero = make_unique<Archer>(name);
+    }
+
+    ui.showMessage("Hero created! Good luck, " + name + "!");
 }
 
 void Game::gameLoop() {
-    cout << CYAN << "\n  [Game loop coming soon]\n" << RESET;
+    if (!currentHero) return;
+
+    ConsoleUI ui;
+    vector<string> rooms = {"Draugr", "Jotunn", "Valkyrie", "Draugr", "Fenrir"};
+
+    for (int i = 0; i < (int)rooms.size(); i++) {
+        cout << "\n--- Room " << (i + 1) << " of 5 ---\n";
+
+        unique_ptr<Enemy> enemy(EnemyFactory::createEnemy(rooms[i]));
+        if (!enemy) continue;
+
+        ui.showCombatStart(enemy->getName());
+
+        Combat combat(*currentHero, *enemy);
+        combat.startCombat();
+
+        if (!currentHero->isAlive()) {
+            ui.showDeathScreen();
+            return;
+        }
+
+        ui.showMessage("You defeated " + enemy->getName() + "!");
+        currentHero->gainXP(enemy->getXPReward());
+
+        if (rand() % 100 < enemy->getDropChance()) {
+            ui.showItemFound(enemy->getDropItemName());
+        }
+    }
+
+    ui.showVictory();
 }
 
 int Game::getUserChoice(int min, int max) {

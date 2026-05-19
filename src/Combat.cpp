@@ -1,94 +1,113 @@
 #include "Combat.h"
+#include "Hero.h"
 #include "Entity.h"
-#include"Hero.h"
-#include"Enemy.h"
+#include "Inventory.h"
+#include "Item.h"
 #include <iostream>
-#include <cstdlib> 
+#include <cstdlib>
 
-Combat::Combat(Hero& hero, Enemy& enemy):hero(hero), enemy(enemy),heroStunned(false),enemyStunned(false){}
+using namespace std;
 
-Combat::~Combat(){
-    cleanupEffects(heroEffects);
-    cleanupEffects(enemyEffects);
+Combat::Combat(Hero& hero, Entity& enemy)
+    : hero(hero), enemy(enemy), maxRounds(50)
+{
 }
 
-void Combat::cleanupEffects(std::vector<StatusEffect*>& effects){
-    for (StatusEffect* e : effects)
-        delete e;
-    effects.clear();
-}
-
-int Combat::calculateDamage(Entity& attacker, Entity& defender){
-    int damage = attacker.getStats().getAttack()-defender.getStats().getDefense();
-    damage += (rand()%5)-2;
-    if (damage<1)damage=1;
+int Combat::calculateDamage(Entity& attacker, Entity& defender) {
+    int damage = attacker.getStats().getAttack() - defender.getStats().getDefense();
+    damage += (rand() % 5) - 2;
+    if (damage < 1) damage = 1;
     return damage;
 }
 
-bool Combat::tryDodge(Entity& attacker, Entity& defender){
-    int dodgeChance = (defender.getStats().getSpeed()-attacker.getStats().getSpeed())*5;
-    if (dodgeChance<0) dodgeChance=0;
-    if (dodgeChance>30) dodgeChance=30;
-    return (rand()%100)<dodgeChance;
+bool Combat::tryDodge(Entity& attacker, Entity& defender) {
+    int dodgeChance = (defender.getStats().getSpeed() - attacker.getStats().getSpeed()) * 5;
+    if (dodgeChance < 0)  dodgeChance = 0;
+    if (dodgeChance > 30) dodgeChance = 30;
+    return (rand() % 100) < dodgeChance;
 }
 
-void Combat::applyEffects(Entity& target, std::vector<StatusEffect*>& effects,bool& stunned){
-    for (StatusEffect* e : effects){
-        e->applyEffect(target);
-        if (e->getName()=="Stun") stunned=true;
-        e->tick();
-    }
-    cleanupEffects(effects);
+bool Combat::isCombatOver() {
+    return !hero.isAlive() || !enemy.isAlive();
 }
 
-bool Combat::playerWon() const {
-    return !enemy.isAlive();
+void Combat::applyEffects() {
 }
 
-void Combat::start(){
-    std::cout << "************  COMBAT START  ************\n";
-    while (hero.isAlive()&& enemy.isAlive()){
-        applyEffects(hero, heroEffects, heroStunned);
-        applyEffects(enemy, enemyEffects, enemyStunned);
+void Combat::heroTurn() {
+    cout << "\n[1] Attack  [2] Use Skill  [3] Use Item  [4] Run\n> ";
+    int choice;
+    cin >> choice;
 
-        if(!hero.isAlive()){std::cout<<hero.getName()<<" has fallen!\n"; break;}
-        if(!enemy.isAlive()){std::cout<<enemy.getName()<<" defeated!\n"; break;}
-        if (heroStunned){
-            std::cout<<hero.getName() << " is stunned and skips their turn!\n";
-            heroStunned = false;
-        }else{
-            std::cout<< "\n[1] Attack  [2] Skill  [3] Item  [4] Run\n> ";
-            int choice; std::cin>>choice;
-            if(choice==1){
-                if(tryDodge(hero,enemy))
-                    std::cout<<enemy.getName()<<" dodges the attack!\n";
-                else{
-                    int dmg = calculateDamage(hero, enemy);
-                    enemy.takeDamage(dmg);
-                    std::cout<<hero.getName()<< " attacks for " << dmg << " damage!\n";
-                }
-
-            }else if (choice==2){
-                hero.useSkill(enemy);
-            }else if (choice==4){
-                if (rand()%2==0){std::cout<<"Escaped!\n"; return;}
-                else std::cout<<"Failed to escape!\n";
-            }
+    if (choice == 1) {
+        if (tryDodge(hero, enemy)) {
+            cout << enemy.getName() << " dodges the attack!\n";
+        } else {
+            int dmg = calculateDamage(hero, enemy);
+            enemy.takeDamage(dmg);
+            cout << hero.getName() << " attacks for " << dmg << " damage!\n";
         }
-        if(!enemy.isAlive()){std::cout<<enemy.getName()<<" defeated!\n"; break;}
-        if (enemyStunned){
-            std::cout<<enemy.getName()<< " is stunned and skips their turn!\n";
-            enemyStunned=false;
-        }else{
-            if (tryDodge(enemy,hero))
-                std::cout<<"You dodge the attack!\n";
-            else{
-                int dmg = calculateDamage(enemy,hero);
-                hero.takeDamage(dmg);
-                std::cout<<enemy.getName()<<" attacks for "<<dmg<<" damage!\n";
-            }
+    } else if (choice == 2) {
+        hero.useSkill(enemy);
+    } else if (choice == 3) {
+        Inventory& inv = hero.getInventory();
+        if (inv.getSize() == 0) {
+            cout << "No items in inventory.\n";
+        } else {
+            inv.display();
+            cout << "Choose item index: ";
+            int idx;
+            cin >> idx;
+            inv.useItem(idx);
         }
-        if (!hero.isAlive()){std:: cout<<hero.getName()<<" has fallen!\n"; break;}
+    } else if (choice == 4) {
+        if (rand() % 2 == 0) {
+            cout << hero.getName() << " escaped!\n";
+            maxRounds = 0;
+        } else {
+            cout << "Failed to escape!\n";
+        }
+    } else {
+        cout << "Invalid choice.\n";
     }
-    
+}
+
+void Combat::enemyTurn() {
+    if (tryDodge(enemy, hero)) {
+        cout << hero.getName() << " dodges the attack!\n";
+    } else {
+        int dmg = calculateDamage(enemy, hero);
+        hero.takeDamage(dmg);
+        cout << enemy.getName() << " attacks for " << dmg << " damage!\n";
+    }
+}
+
+void Combat::startCombat() {
+    cout << "=== COMBAT START ===\n";
+    int round = 0;
+
+    while (!isCombatOver() && round < maxRounds) {
+        round++;
+        cout << "\n--- Round " << round << " ---\n";
+        cout << hero.getName()  << " HP: " << hero.getStats().getCurrentHP()
+             << "/" << hero.getStats().getMaxHP() << "\n";
+        cout << enemy.getName() << " HP: " << enemy.getStats().getCurrentHP()
+             << "/" << enemy.getStats().getMaxHP() << "\n";
+
+        applyEffects();
+
+        if (hero.getStats().getSpeed() >= enemy.getStats().getSpeed()) {
+            heroTurn();
+            if (!isCombatOver()) enemyTurn();
+        } else {
+            enemyTurn();
+            if (!isCombatOver()) heroTurn();
+        }
+    }
+
+    if (!enemy.isAlive()) {
+        cout << "\n" << enemy.getName() << " is defeated!\n";
+    } else if (!hero.isAlive()) {
+        cout << "\n" << hero.getName() << " has fallen!\n";
+    }
 }

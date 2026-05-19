@@ -12,10 +12,10 @@ void Weapon::use() {
     cout << "You equip [" << getName() << "]!\n";
 }
 
-int Weapon::getAttackBonus() {
+int Weapon::getAttackBonus() const {
     return attackBonus;
 }
 
-std::string Weapon::getDescription() {
+std::string Weapon::getDescription() const {
     return getName() + " -- ATK +" + std::to_string(getAttackBonus());
 }

@@ -9,5 +9,4 @@ public:
 
     void useSkill(Entity& target) override;
     std::string getClassName() const override;
-    void levelUp() override;
 };

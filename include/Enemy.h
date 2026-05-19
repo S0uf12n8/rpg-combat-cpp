@@ -13,9 +13,8 @@ public:
           const std::string& drop, int dropChance, int xp);
     virtual ~Enemy() = default;
 
-    int attack(Entity& target) override;
+    void attack(Entity& target) override;
     void useSkill(Entity& target) override;
-    std::string getType() const override;
 
     std::string tryDrop() const;
 
