@@ -20,15 +20,3 @@ void Archer::useSkill(Entity& target) {
     stats_.spendMana(15);
     target.takeDamage(stats_.getAttack());
 }
-
-void Archer::levelUp() {
-    Hero::levelUp();
-    stats_.setMaxHP(stats_.getMaxHP() + 20);
-    stats_.heal(20);
-    stats_.setAttack(stats_.getAttack() + 3);
-    stats_.setDefense(stats_.getDefense() + 2);
-    stats_.setSpeed(stats_.getSpeed() + 3);
-    stats_.setMaxMana(stats_.getMaxMana() + 5);
-    stats_.restoreMana(5);
-    cout << name_ << " leveled up! Quick and deadly!\n";
-}
