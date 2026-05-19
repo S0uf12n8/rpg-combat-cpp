@@ -16,6 +16,7 @@ public:
 
     virtual int attack(Entity& target)   = 0;
     virtual void useSkill(Entity& target) = 0;
+    virtual std::string getType() const  = 0;
 
     void takeDamage(int raw);
     bool isAlive() const;
