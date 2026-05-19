@@ -1,49 +1,45 @@
-// ============================================================
-//  Warrior.cpp
-//  Implementation of the Warrior class and its PowerSlash skill.
-// ============================================================
-
 #include "Warrior.h"
 #include <iostream>
-#include <algorithm>
 
-// ---- PowerSlash implementation ----
-
-PowerSlash::PowerSlash()
-    : Skill("Power Slash", /*manaCost=*/0, /*power=*/55, "A heavy blow that bypasses part of the target's defense.")
-{}
-
-void PowerSlash::use(Entity& caster, Entity& target) const {
-    cout << caster.getName() << " charges and delivers a POWER SLASH!\n";
-    // Armor-piercing: bypass defense by adding it back so Stats' reduction cancels it out.
-    int piercing = power_ + target.getStats().getDefense();
-    target.takeDamage(piercing);
-}
-
-// ---- Warrior implementation ----
+using namespace std;
 
 Warrior::Warrior(const string& name)
-    : Hero(name, Stats(/*maxHP=*/160, /*atk=*/22, /*def=*/14, /*spd=*/7))
-{
-    // Register signature skill using a raw pointer (new).
-    // The Entity destructor is responsible for calling delete on this pointer.
-    skills_.push_back(new PowerSlash());
-}
+    : Hero(name, Stats(120, 18, 12, 7, 20)) {}
 
-void Warrior::attack(Entity& target) {
-    cout << name_ << " swings his sword at " << target.getName() << "!\n";
-    target.takeDamage(stats_.getAttack());
+string Warrior::getType() const {
+    return "Warrior";
 }
 
 void Warrior::useSkill(Entity& target) {
-    tryUseSkill(0, target); // Index 0 = PowerSlash
+    if (stats_.getCurrentHP() <= 10) {
+        cout << "Not enough HP for Berserk!\n";
+        return;
+    }
+
+    cout << name_ << " uses Berserk!\n";
+    
+    // Costs 10 HP to self (ignores self defense)
+    this->takeDamage(10 + stats_.getDefense());
+
+    // Attack the target twice using stats_.getAttack() raw damage formula
+    for (int i = 0; i < 2; ++i) {
+        if (target.isAlive()) {
+            int hpBefore = target.getStats().getCurrentHP();
+            target.takeDamage(stats_.getAttack());
+            int damageDealt = hpBefore - target.getStats().getCurrentHP();
+            cout << "  Hit " << (i + 1) << " deals " << damageDealt << " damage!\n";
+        }
+    }
 }
 
 void Warrior::levelUp() {
-    Hero::levelUp(); // Call base level-up first
-    // Warrior bonus: extra HP and defense growth
-    stats_.setMaxHP(stats_.getMaxHP() + 10);
-    stats_.heal(10);
+    Hero::levelUp();
+    stats_.setMaxHP(stats_.getMaxHP() + 25);
+    stats_.heal(25);
+    stats_.setAttack(stats_.getAttack() + 4);
     stats_.setDefense(stats_.getDefense() + 3);
-    cout << name_ << "'s warrior training boosted HP and defense further!\n";
+    stats_.setSpeed(stats_.getSpeed() + 1);
+    stats_.setMaxMana(stats_.getMaxMana() + 2);
+    stats_.restoreMana(2);
+    cout << name_ << " leveled up! Stronger and tougher!\n";
 }
