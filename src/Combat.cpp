@@ -36,6 +36,7 @@ void Combat::applyEffects(Entity& target, std::vector<StatusEffect*>& effects,bo
     for (StatusEffect* e : effects){
         e->applyEffect(target);
         if (e->getName()=="Stun") stunned=true;
+        e->tick();
     }
     cleanupEffects(effects);
 }

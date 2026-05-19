@@ -1,13 +1,28 @@
-#include "Combat.h"
-#include "Hero.h"
-#include "Enemy.h"
-#include "Entity.h"
-#include <iostream>
+#pragma once
+#include <vector>
+#include "StatusEffect.h"
 
-Combat::Combat(Hero& hero, Enemy& enemy)
-    : hero(hero), enemy(enemy), heroStunned(false), enemyStunned(false) {}
+class Hero;
+class Enemy;
+class Entity;
 
-Combat::~Combat() {
-    cleanupEffects(heroEffects);
-    cleanupEffects(enemyEffects);
-}
+class Combat {
+private:
+    Hero& hero;
+    Enemy& enemy;
+    std::vector<StatusEffect*> heroEffects;
+    std::vector<StatusEffect*> enemyEffects;
+    bool heroStunned;
+    bool enemyStunned;
+
+    int calculateDamage(Entity& attacker, Entity& defender);
+    bool tryDodge(Entity& attacker, Entity& defender);
+    void applyEffects(Entity& target, std::vector<StatusEffect*>& effects, bool& stunned);
+    void cleanupEffects(std::vector<StatusEffect*>& effects);
+
+public:
+    Combat(Hero& hero, Enemy& enemy);
+    ~Combat();
+    void start();
+    bool playerWon() const;
+};
