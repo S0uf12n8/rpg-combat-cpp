@@ -1,15 +1,17 @@
 #include "Combat.h"
 #include "Hero.h"
+#include "Enemy.h"
 #include "Entity.h"
 #include "Inventory.h"
 #include "Item.h"
 #include <iostream>
+#include <string>
 #include <cstdlib>
 
 using namespace std;
 
 Combat::Combat(Hero& hero, Entity& enemy)
-    : hero(hero), enemy(enemy), maxRounds(50)
+    : hero(hero), enemy(enemy), maxRounds(50), escaped_(false)
 {
 }
 
@@ -35,70 +37,69 @@ void Combat::applyEffects() {
 }
 
 void Combat::heroTurn() {
-    cout << "\n[1] Attack  [2] Use Skill  [3] Use Item  [4] Run\n> ";
+    ui.showCombatMenu();
+    cout << " > ";
     int choice;
     cin >> choice;
 
     if (choice == 1) {
         if (tryDodge(hero, enemy)) {
-            cout << enemy.getName() << " dodges the attack!\n";
+            ui.showCombatLog(enemy.getName() + " dodges the attack!");
         } else {
             int dmg = calculateDamage(hero, enemy);
             enemy.takeDamage(dmg);
-            cout << hero.getName() << " attacks for " << dmg << " damage!\n";
+            ui.showCombatLog(hero.getName() + " attacks for " + to_string(dmg) + " damage!");
         }
     } else if (choice == 2) {
         hero.useSkill(enemy);
     } else if (choice == 3) {
         Inventory& inv = hero.getInventory();
         if (inv.getSize() == 0) {
-            cout << "No items in inventory.\n";
+            ui.showCombatLog("No items in inventory.");
         } else {
             inv.display();
-            cout << "Choose item index: ";
+            ui.showCombatLog("Choose item index:");
             int idx;
             cin >> idx;
             inv.useItem(idx);
         }
     } else if (choice == 4) {
         if (rand() % 2 == 0) {
-            cout << hero.getName() << " escaped!\n";
-            maxRounds = 0;
+            ui.showCombatLog(hero.getName() + " escaped!");
+            escaped_ = true;
         } else {
-            cout << "Failed to escape!\n";
+            ui.showCombatLog("Failed to escape!");
         }
     } else {
-        cout << "Invalid choice.\n";
+        ui.showCombatLog("Invalid choice.");
     }
 }
 
 void Combat::enemyTurn() {
     if (tryDodge(enemy, hero)) {
-        cout << hero.getName() << " dodges the attack!\n";
+        ui.showCombatLog(hero.getName() + " dodges the attack!");
     } else {
         int dmg = calculateDamage(enemy, hero);
         hero.takeDamage(dmg);
-        cout << enemy.getName() << " attacks for " << dmg << " damage!\n";
+        ui.showCombatLog(enemy.getName() + " attacks for " + to_string(dmg) + " damage!");
     }
 }
 
 void Combat::startCombat() {
-    cout << "=== COMBAT START ===\n";
+    ui.showSeparator();
     int round = 0;
 
     while (!isCombatOver() && round < maxRounds) {
         round++;
-        cout << "\n--- Round " << round << " ---\n";
-        cout << hero.getName()  << " HP: " << hero.getStats().getCurrentHP()
-             << "/" << hero.getStats().getMaxHP() << "\n";
-        cout << enemy.getName() << " HP: " << enemy.getStats().getCurrentHP()
-             << "/" << enemy.getStats().getMaxHP() << "\n";
+        ui.showSeparator();
+        ui.showCombatLog("Round " + to_string(round));
+        ui.showHPBars(hero, dynamic_cast<Enemy&>(enemy));
 
         applyEffects();
 
         if (hero.getStats().getSpeed() >= enemy.getStats().getSpeed()) {
             heroTurn();
-            if (isCombatOver() || maxRounds == 0) break;
+            if (isCombatOver() || escaped_) break;
             enemyTurn();
         } else {
             enemyTurn();
@@ -107,8 +108,8 @@ void Combat::startCombat() {
     }
 
     if (!enemy.isAlive()) {
-        cout << "\n" << enemy.getName() << " is defeated!\n";
+        ui.showCombatLog(enemy.getName() + " is defeated!");
     } else if (!hero.isAlive()) {
-        cout << "\n" << hero.getName() << " has fallen!\n";
+        ui.showCombatLog(hero.getName() + " has fallen!");
     }
 }

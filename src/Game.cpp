@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "EnemyFactory.h"
 #include "Combat.h"
+#include "Consumable.h"
 #include <iostream>
 #include <limits>
 #include <cstdlib>
@@ -107,10 +108,13 @@ void Game::gameLoop() {
         }
 
         ui.showMessage("You defeated " + enemy->getName() + "!");
+        currentHero->getStats().restoreMana(currentHero->getStats().getMaxMana());
         currentHero->gainXP(enemy->getXPReward());
 
         if (rand() % 100 < enemy->getDropChance()) {
             ui.showItemFound(enemy->getDropItemName());
+            Consumable* potion = new Consumable(enemy->getDropItemName(), "", 0, 30);
+            currentHero->addItem(potion);
         }
     }
 

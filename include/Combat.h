@@ -1,13 +1,16 @@
 #pragma once
+#include "ConsoleUI.h"
 
 class Hero;
 class Entity;
 
 class Combat {
 private:
-    Hero&   hero;
-    Entity& enemy;
-    int     maxRounds;
+    Hero&     hero;
+    Entity&   enemy;
+    int       maxRounds;
+    bool      escaped_;
+    ConsoleUI ui;
 
     int  calculateDamage(Entity& attacker, Entity& defender);
     bool tryDodge(Entity& attacker, Entity& defender);
