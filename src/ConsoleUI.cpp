@@ -185,7 +185,78 @@ void ConsoleUI::showHeroStats(const Hero& hero) const {
 // ── showCombatStart ───────────────────────────────────────────────────────────
 
 void ConsoleUI::showCombatStart(const string& enemyName) const {
-    cout << RED << "  A " << enemyName << " appears!\n" << RESET;
+    const int inner = 32;
+    const string DARK = "\033[90m";
+
+    if (enemyName == "Draugr") {
+        cout << WHITE;
+        cout << "  " << DBL_TL << rep(DBL_H, inner) << DBL_TR << "\n";
+        cout << "  " << DBL_V  << padTo("   \xe2\x98\xa0  A DRAUGR APPROACHES  \xe2\x98\xa0   ", inner) << DBL_V << "\n";
+        cout << "  " << DBL_BL << rep(DBL_H, inner) << DBL_BR << "\n";
+        cout << RESET;
+        cout << "\n";
+        cout << "     .-.\n";
+        cout << "    (o o)\n";
+        cout << "    | O |\n";
+        cout << "   /|---|\\  \n";
+        cout << "  / |   | \\\n";
+        cout << "     | |\n";
+        cout << "    _| |_\n";
+        cout << "\n";
+        cout << DARK << "  \"The undead stirs from its grave...\"\n" << RESET;
+
+    } else if (enemyName == "Jotunn") {
+        cout << YELLOW;
+        cout << "  " << DBL_TL << rep(DBL_H, inner) << DBL_TR << "\n";
+        cout << "  " << DBL_V  << padTo("   \xe2\x9b\xb0  A JOTUNN RISES  \xe2\x9b\xb0", inner) << DBL_V << "\n";
+        cout << "  " << DBL_BL << rep(DBL_H, inner) << DBL_BR << "\n";
+        cout << RESET;
+        cout << "\n";
+        cout << "     \\O/\n";
+        cout << "      |\n";
+        cout << "     /|\\\n";
+        cout << "     / \\\n";
+        cout << "\n";
+        cout << DARK << "  \"The ground trembles beneath its feet...\"\n" << RESET;
+
+    } else if (enemyName == "Valkyrie") {
+        cout << CYAN;
+        cout << "  " << DBL_TL << rep(DBL_H, inner) << DBL_TR << "\n";
+        cout << "  " << DBL_V  << padTo("   \xe2\x9a\xa1  A VALKYRIE DESCENDS  \xe2\x9a\xa1  ", inner) << DBL_V << "\n";
+        cout << "  " << DBL_BL << rep(DBL_H, inner) << DBL_BR << "\n";
+        cout << RESET;
+        cout << "\n";
+        cout << "     }|{\n";
+        cout << "    _\\|/_\n";
+        cout << "   ( o o )\n";
+        cout << "    \\___/\n";
+        cout << "\n";
+        cout << DARK << "  \"She rides from Asgard to claim the fallen...\"\n" << RESET;
+
+    } else if (enemyName == "Fenrir") {
+        cout << BOLD << RED;
+        cout << "  " << DBL_TL << rep(DBL_H, inner) << DBL_TR << "\n";
+        cout << "  " << DBL_V  << padTo("  \xf0\x9f\x90\xba  FENRIR \xe2\x80\x94 THE GREAT WOLF", inner) << DBL_V << "\n";
+        cout << "  " << DBL_BL << rep(DBL_H, inner) << DBL_BR << "\n";
+        cout << RESET;
+        cout << "\n";
+        cout << "    /\\_____/\\\n";
+        cout << "   /  o   o  \\\n";
+        cout << "  ( ==  ^  == )\n";
+        cout << "   )         (\n";
+        cout << "  (           )\n";
+        cout << "\n";
+        cout << DARK << "  \"The wolf that will devour the sun...\"\n" << RESET;
+
+    } else {
+        cout << RED;
+        cout << "  " << DBL_TL << rep(DBL_H, inner) << DBL_TR << "\n";
+        cout << "  " << DBL_V  << padTo("  A " + enemyName + " appears!", inner) << DBL_V << "\n";
+        cout << "  " << DBL_BL << rep(DBL_H, inner) << DBL_BR << "\n";
+        cout << RESET;
+    }
+
+    cout << "\n";
 }
 
 // ── showCombatMenu ────────────────────────────────────────────────────────────
