@@ -5,18 +5,17 @@
 #include <vector>
 #include "Stats.h"
 #include "Skill.h"
-using namespace std;
 
 class Entity {
 protected:
-    string name_;
-    Stats  stats_;
-    vector<Skill*> skills_;
+    std::string name_;
+    Stats       stats_;
+    std::vector<Skill*> skills_;
 
     void tryUseSkill(int index, Entity& target);
 
 public:
-    Entity(const string& name, const Stats& stats);
+    Entity(const std::string& name, const Stats& stats);
     virtual ~Entity();
 
     virtual void attack(Entity& target)   = 0;
@@ -26,7 +25,7 @@ public:
     bool isAlive() const;
     virtual void displayStats() const;
 
-    const string& getName()  const;
+    const std::string& getName()  const;
     const Stats&  getStats() const;
     Stats&        getStats();
 };

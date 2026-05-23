@@ -1,8 +1,9 @@
 #ifndef STATS_H
 #define STATS_H
 
+#include <ostream>
+
 class Stats {
-    
 private:
     int maxHP_;
     int currentHP_;
@@ -13,7 +14,6 @@ private:
     int maxMana_;
     
 public:
-
     Stats(int maxHP, int attack, int defense, int speed, int mana = 0);
     
     int getMaxHP()     const;
@@ -23,14 +23,14 @@ public:
     int getSpeed()     const;
     int getMana()      const;
     int getMaxMana()   const;
-
+    
     void setAttack(int value);
     void setDefense(int value);
     void setSpeed(int value);
     void setMana(int value);
     void setMaxHP(int value);
     void setMaxMana(int value);
-
+    
     // Actions
     void takeDamage(int amount);
     void heal(int amount);
@@ -39,6 +39,7 @@ public:
     bool isDead() const;
     int calculateReducedDamage(int rawDamage) const;
 
+    friend std::ostream& operator<<(std::ostream& os, const Stats& s);
 };
 
 #endif

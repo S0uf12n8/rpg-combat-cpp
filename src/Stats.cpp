@@ -1,5 +1,6 @@
 #include "Stats.h"
 #include <algorithm>
+#include <ostream>
 
 Stats::Stats(int maxHP, int attack, int defense, int speed, int mana)
     : maxHP_(maxHP),
@@ -25,21 +26,19 @@ void Stats::setSpeed(int value)   { speed_   = std::max(0, value); }
 void Stats::setMana(int value)    { mana_    = std::max(0, std::min(maxMana_, value)); }
 void Stats::setMaxHP(int value) {
     maxHP_ = std::max(1, value);
-    // Clamp currentHP if new maxHP is lower
     currentHP_ = std::min(currentHP_, maxHP_);
 }
 void Stats::setMaxMana(int value) {
     maxMana_ = std::max(0, value);
-    mana_ = std::min(mana_, maxMana_); // Clamp current mana if max decreases
+    mana_ = std::min(mana_, maxMana_);
 }
-// Actions
+
 int Stats::calculateReducedDamage(int rawDamage) const {
     return std::max(1, rawDamage - defense_);
 }
 
 void Stats::takeDamage(int amount) {
-    int reduced = calculateReducedDamage(amount);
-    currentHP_ = std::max(0, currentHP_ - reduced);
+    currentHP_ = std::max(0, currentHP_ - amount);
 }
 
 void Stats::heal(int amount) {
@@ -56,4 +55,13 @@ void Stats::restoreMana(int amount) {
 
 bool Stats::isDead() const {
     return currentHP_ <= 0;
+}
+
+std::ostream& operator<<(std::ostream& os, const Stats& s) {
+    os << "HP: "  << s.currentHP_ << "/" << s.maxHP_
+       << " | ATK: " << s.attack_
+       << " | DEF: " << s.defense_
+       << " | SPD: " << s.speed_
+       << " | MP: "  << s.mana_ << "/" << s.maxMana_;
+    return os;
 }

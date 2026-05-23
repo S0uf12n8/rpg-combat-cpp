@@ -7,13 +7,12 @@ private:
     int healAmount; 
 
 public:
-    // Constructor: we need name, description, value (for Item)
     Consumable(const std::string& name,
                const std::string& description,
                int value,
                int healAmount);
 
-    // Override use() — this is what happens when player drinks a potion
+    //  this is what happens when player drinks a potion
     void use() override;
 
     int getHealAmount() const;

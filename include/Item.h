@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <ostream>
 
 // Item is the "parent" of items in the game
 //  Consumable, Weapon, or Armor (LWLAD)

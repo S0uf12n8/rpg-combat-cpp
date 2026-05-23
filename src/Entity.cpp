@@ -2,11 +2,13 @@
 #include <iostream>
 using namespace std;
 
-Entity::Entity(const string& name, const Stats& stats)
+Entity::Entity(const std::string& name, const Stats& stats)
     : name_(name), stats_(stats) {}
 
 Entity::~Entity() {
-    for (Skill* s : skills_) delete s;
+    for (Skill* s : skills_) {
+        delete s;
+    }
 }
 
 void Entity::takeDamage(int raw) {
@@ -18,17 +20,20 @@ bool Entity::isAlive() const {
 }
 
 void Entity::displayStats() const {
-    cout << "  [" << name_ << "]"
-         << "  hp: " << stats_.getCurrentHP() << "/" << stats_.getMaxHP()
-         << "  mp: " << stats_.getMana()      << "/" << stats_.getMaxMana()
-         << "  atk: " << stats_.getAttack()
-         << "  def: " << stats_.getDefense()
-         << "  spd: " << stats_.getSpeed() << "\n";
+    std::cout << name_ << "\n" << stats_ << "\n";
 }
 
-const string& Entity::getName()  const { return name_; }
-const Stats&  Entity::getStats() const { return stats_; }
-Stats&        Entity::getStats()       { return stats_; }
+const std::string& Entity::getName() const {
+    return name_;
+}
+
+const Stats& Entity::getStats() const {
+    return stats_;
+}
+
+Stats& Entity::getStats() {
+    return stats_;
+}
 
 void Entity::tryUseSkill(int index, Entity& target) {
     if (index < 0 || index >= (int)skills_.size()) return;

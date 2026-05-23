@@ -1,6 +1,7 @@
 #include "Archer.h"
 #include <iostream>
 #include <cstdlib>
+
 using namespace std;
 
 PiercingArrow::PiercingArrow()
@@ -18,6 +19,10 @@ void PiercingArrow::use(Entity& caster, Entity& target) const {
 Archer::Archer(const string& name)
     : Hero(name, Stats(110, 26, 9, 18, 60)) {
     skills_.push_back(new PiercingArrow());
+}
+
+string Archer::getClassName() const {
+    return "Archer";
 }
 
 void Archer::attack(Entity& target) {
