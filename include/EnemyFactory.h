@@ -4,5 +4,5 @@
 
 class EnemyFactory {
 public:
-    static Enemy* createEnemy(const std::string& type);
+    static Enemy* createEnemy(const std::string& type, int level = 1);
 };

@@ -4,6 +4,9 @@
 #include "Entity.h"
 #include "Inventory.h"
 #include "Item.h"
+#include "Consumable.h"
+#include "Weapon.h"
+#include "Armor.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -61,6 +64,21 @@ void Combat::heroTurn() {
             ui.showCombatLog("Choose item index:");
             int idx;
             cin >> idx;
+
+            Item* item = inv.getItem(idx);
+            if (item) {
+                if (Consumable* c = dynamic_cast<Consumable*>(item)) {
+                    if (c->getName().find("Mana") != std::string::npos) {
+                        hero.getStats().restoreMana(c->getHealAmount());
+                    } else {
+                        hero.getStats().heal(c->getHealAmount());
+                    }
+                } else if (Weapon* w = dynamic_cast<Weapon*>(item)) {
+                    hero.equipWeapon(w);
+                } else if (Armor* a = dynamic_cast<Armor*>(item)) {
+                    hero.equipArmor(a);
+                }
+            }
             inv.useItem(idx);
         }
     } else if (choice == 4) {

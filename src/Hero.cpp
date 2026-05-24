@@ -26,16 +26,25 @@ void Hero::attack(Entity& target) {
 
 void Hero::gainXP(int amount) {
     xp_ += amount;
-    if (xp_ >= xpToNext_) {
+    while (xp_ >= xpToNext_) {
+        xp_ -= xpToNext_;
         levelUp();
     }
 }
 
 void Hero::levelUp() {
     level_++;
-    xpToNext_ *= 2;
-    stats_.setAttack(stats_.getAttack() + 2);
-    stats_.setDefense(stats_.getDefense() + 1);
+    xpToNext_ += 50 * level_;
+    
+    stats_.setMaxHP(stats_.getMaxHP() + 15);
+    stats_.setMaxMana(stats_.getMaxMana() + 10);
+    stats_.setAttack(stats_.getAttack() + 3);
+    stats_.setDefense(stats_.getDefense() + 2);
+    stats_.setSpeed(stats_.getSpeed() + 1);
+
+    stats_.heal(stats_.getMaxHP());
+    stats_.restoreMana(stats_.getMaxMana());
+
     cout << name_ << " leveled up! Now level " << level_ << "!\n";
 }
 
