@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(ls -Recurse \"d:/rpg-combat-cpp/src\" | Where-Object { $_.PSIsContainer -eq $false })"
+    ]
+  }
+}
