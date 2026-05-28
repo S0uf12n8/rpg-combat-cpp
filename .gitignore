@@ -9,4 +9,4 @@ build/
 .DS_Store
 Thumbs.db
 saves/*.json
-claud.md
+claud.md.claude/
