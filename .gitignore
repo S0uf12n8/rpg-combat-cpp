@@ -10,3 +10,4 @@ build/
 Thumbs.db
 saves/*.json
 claud.md.claude/
+.claude/
