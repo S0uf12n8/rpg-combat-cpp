@@ -53,9 +53,8 @@ bool Stats::isDead() const {
 }
 
 int Stats::calculateReducedDamage(int rawDamage) const {
-    int reduced = rawDamage;
-    if (reduced < 1) reduced = 1;
-    return reduced;
+    int reduced = rawDamage - defense_;
+    return (reduced < 1) ? 1 : reduced;
 }
 
 std::ostream& operator<<(std::ostream& os, const Stats& s) {

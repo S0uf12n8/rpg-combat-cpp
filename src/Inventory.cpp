@@ -2,6 +2,11 @@
 #include "Item.h"
 #include <iostream>
 
+Inventory::~Inventory() {
+    for (Item* item : items)
+        delete item;
+}
+
 bool Inventory::addItem(Item* item) {
     if (isFull()) {
         std::cout << "Inventory is full (max " << MAX_SLOTS << " items)\n";
@@ -18,6 +23,7 @@ void Inventory::removeItem(int index) {
         return;
     }
     std::cout << items[index]->getName() << " removed from inventory\n";
+    delete items[index];
     items.erase(items.begin() + index);
 }
 

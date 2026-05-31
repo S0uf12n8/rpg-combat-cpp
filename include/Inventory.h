@@ -10,6 +10,7 @@ private:
     static const int MAX_SLOTS = 5;
 
 public:
+    ~Inventory();
     bool  addItem(Item* item);
     void  removeItem(int index);
     void  useItem(int index);

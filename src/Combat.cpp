@@ -30,10 +30,12 @@ bool Combat::tryDodge(Entity& attacker, Entity& defender) {
 }
 
 bool Combat::isCombatOver() {
-    return !hero.isAlive() || !enemy.isAlive();
+    return !hero.isAlive() || !enemy.isAlive() || escaped_;
 }
 
 void Combat::applyEffects() {
+    hero.applyAndTickEffects();
+    enemy.applyAndTickEffects();
 }
 
 void Combat::heroTurn() {
@@ -93,7 +95,8 @@ void Combat::startCombat() {
         round++;
         ui.showSeparator();
         ui.showCombatLog("Round " + to_string(round));
-        ui.showHPBars(hero, dynamic_cast<Enemy&>(enemy));
+        Enemy* e = dynamic_cast<Enemy*>(&enemy);
+        if (e) ui.showHPBars(hero, *e);
 
         applyEffects();
 

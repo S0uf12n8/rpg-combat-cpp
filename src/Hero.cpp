@@ -16,9 +16,8 @@ Hero::Hero(const std::string& name, const Stats& stats)
 }
 
 void Hero::attack(Entity& target) {
-    int damage = stats_.getAttack() - target.getStats().getDefense();
-    damage += rand() % 5 - 2;
-    if (damage < 1) damage = 1;
+    int rawDamage = stats_.getAttack() + (rand() % 5 - 2);
+    int damage = target.getStats().calculateReducedDamage(rawDamage);
     target.takeDamage(damage);
     cout << name_ << " attacks " << target.getName()
          << " for " << damage << " damage!\n";
@@ -44,12 +43,16 @@ bool Hero::addItem(Item* item) {
 }
 
 void Hero::equipWeapon(Weapon* w) {
+    if (equippedWeapon_)
+        stats_.setAttack(stats_.getAttack() - equippedWeapon_->getAttackBonus());
     equippedWeapon_ = w;
     stats_.setAttack(stats_.getAttack() + w->getAttackBonus());
     cout << name_ << " equipped " << w->getName() << "!\n";
 }
 
 void Hero::equipArmor(Armor* a) {
+    if (equippedArmor_)
+        stats_.setDefense(stats_.getDefense() - equippedArmor_->getDefenseBonus());
     equippedArmor_ = a;
     stats_.setDefense(stats_.getDefense() + a->getDefenseBonus());
     cout << name_ << " equipped " << a->getName() << "!\n";
